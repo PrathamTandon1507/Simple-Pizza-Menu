@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import "./index.css";
 
 //this is from data.js (does not exist anymore)
 const pizzaData = [
@@ -50,23 +51,65 @@ const pizzaData = [
 //react code
 function App() {
   return (
-    <div>
-      <h1>Hello React!</h1>
-      <Pizza />
-      <Pizza />
-      <Pizza />
+    <div className="container">
+      <Header />
+      <Menu />
+      <Footer />
     </div>
   );
 }
 
-function Pizza() {
+function Header() {
   return (
-    <div>
-      <h1>Pizza</h1>
-      <h3> Pizza Prosciutto</h3>
-      <p>Tomato, mozarella, ham, aragula, and burrata cheese</p>
-      <img src="pizzas/prosciutto.jpg" alt="Prosciutto" />
+    <div className="header">
+      <h1 className="header">Fast React Pizza Co.</h1>;
     </div>
+  );
+}
+
+function Menu() {
+  return (
+    <main className="menu">
+      <h2>Our Menu</h2>
+      <ul className="pizzas">
+        {pizzaData.map((pizzas) => {
+          //The reason why we are using map instead of forEach here is because we need some JSX inside <ul> and map function provides that because it creates a new array
+          return <Pizza pizzaObj={pizzas} key={pizzas.name} />; //key is a unique identifier for each pizza component
+        })}
+        ;
+      </ul>
+    </main>
+  );
+}
+
+function Pizza(props) {
+  console.log(props);
+  return (
+    <div className="pizza">
+      <li>
+        <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
+        <div>
+          <h3>{props.pizzaObj.name}</h3>
+          <p>{props.pizzaObj.ingredients}</p>
+          <span>{props.pizzaObj.price}</span>
+        </div>
+      </li>
+    </div>
+  );
+}
+
+function Footer() {
+  const hour = new Date().getHours();
+  console.log(hour);
+
+  const openAt = 12;
+  const closesAt = 22;
+  const isOpen = hour >= openAt && hour <= closesAt;
+  console.log(isOpen);
+  return (
+    <footer className="footer">
+      {new Date().toLocaleTimeString()}. We're currently open!
+    </footer>
   );
 }
 
