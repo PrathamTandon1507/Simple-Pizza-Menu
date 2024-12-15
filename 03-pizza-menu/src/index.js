@@ -67,49 +67,87 @@ function Header() {
   );
 }
 
+//use {} to enter JS mode
+// <> </> is a react fragment that is used to group data as one parent. We usually use divs but that is not always possible (Due to formatting issues)
 function Menu() {
+  const pizza = pizzaData;
+  const pizzaLen = pizza.length;
   return (
     <main className="menu">
       <h2>Our Menu</h2>
-      <ul className="pizzas">
-        {pizzaData.map((pizzas) => {
-          //The reason why we are using map instead of forEach here is because we need some JSX inside <ul> and map function provides that because it creates a new array
-          return <Pizza pizzaObj={pizzas} key={pizzas.name} />; //key is a unique identifier for each pizza component
-        })}
-        ;
-      </ul>
+      {pizzaLen > 0 ? (
+        <>
+          <Description />
+          <ul className="pizzas">
+            {pizza.map((pizzas) => (
+              //The reason why we are using map instead of forEach here is because we need some JSX inside <ul> and map function provides that because it creates a new array
+              <Pizza pizzaObj={pizzas} key={pizzas.name} /> //key is a unique identifier for each pizza component
+            ))}
+          </ul>
+        </>
+      ) : (
+        <p>We're still working on our menu, please come back later!</p>
+      )}
     </main>
   );
 }
 
-function Pizza(props) {
-  console.log(props);
+function Description() {
   return (
-    <div className="pizza">
+    <p>
+      Authentic Italian cuisine. 6 creative dishes to choose from. All from our
+      stone oven, all organic, all delicious.
+    </p>
+  );
+}
+
+function Pizza({ pizzaObj }) {
+  //destructuring the props and just using the item that we need
+
+  //Here, we are conditionally checking and adding class to a specific pizza object by entering JS mode. All classes have pizza class but only sold out pizzas need to be given sold-out class
+  return (
+    <div className={`pizza ${pizzaObj.soldOut ? "sold-out" : ""}`}>
       <li>
-        <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
+        <img src={pizzaObj.photoName} alt={pizzaObj.name} />
         <div>
-          <h3>{props.pizzaObj.name}</h3>
-          <p>{props.pizzaObj.ingredients}</p>
-          <span>{props.pizzaObj.price}</span>
+          <h3>{pizzaObj.name}</h3>
+          <p>{pizzaObj.ingredients}</p>
+          <span>{pizzaObj.soldOut ? "Sold out" : "$" + pizzaObj.price}</span>
         </div>
       </li>
     </div>
-  );
+  ); //here we knew that we wanted a span element but didn't know whether its sold out or not, so we used ternary inside the span element instead of separately creating a span for both true/false conditions
 }
 
 function Footer() {
   const hour = new Date().getHours();
   console.log(hour);
 
-  const openAt = 12;
-  const closesAt = 22;
-  const isOpen = hour >= openAt && hour <= closesAt;
+  const opensAt = 1;
+  const closesAt = 9;
+  const isOpen = hour >= opensAt && hour <= closesAt;
   console.log(isOpen);
   return (
     <footer className="footer">
-      {new Date().toLocaleTimeString()}. We're currently open!
+      {isOpen ? (
+        <Order opensAt={opensAt} closesAt={closesAt} />
+      ) : (
+        <p>
+          We are happy to welcome you between {opensAt}:00 and {closesAt}:00!
+        </p>
+      )}
     </footer>
+  );
+}
+function Order({ opensAt, closesAt }) {
+  return (
+    <div className="order">
+      <p>
+        We're open from {opensAt}:00 to {closesAt}:00! Come visit us or order
+        online.
+      </p>
+      <button className="btn">Order</button>
+    </div>
   );
 }
 
