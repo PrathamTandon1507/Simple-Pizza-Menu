@@ -126,7 +126,6 @@ function Footer() {
   const opensAt = 1;
   const closesAt = 9;
   const isOpen = hour >= opensAt && hour <= closesAt;
-  console.log(isOpen);
   return (
     <footer className="footer">
       {isOpen ? (
@@ -143,8 +142,8 @@ function Order({ opensAt, closesAt }) {
   return (
     <div className="order">
       <p>
-        We're open from {opensAt}:00 to {closesAt}:00! Come visit us or order
-        online.
+        We're open from "0"{opensAt}:00 PM to "0"{closesAt}:00 PM! Come visit us
+        or order online.
       </p>
       <button className="btn">Order</button>
     </div>
